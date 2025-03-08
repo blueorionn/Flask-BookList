@@ -42,6 +42,7 @@ This project is a Flask-based web application that explores session authenticati
    ```bash
    export PYTHONDONTWRITEBYTECODE=1
    export FLASK_ENV="development"
+   export SECRET_KEY="your-secret-key"
    export DB_HOST="your-database-host"
    export DB_NAME="your-database-name"
    export DB_USERNAME="your-database-username"
