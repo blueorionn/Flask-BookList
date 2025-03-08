@@ -4,7 +4,7 @@ from flask import Flask, render_template, send_from_directory
 
 from booklist.settings import config
 from booklist.extensions import init_cors
-from booklist import core
+from booklist import core, auth
 
 
 def create_app(config_object=config):
@@ -37,6 +37,7 @@ def register_blueprints(app: Flask):
     """Registering blueprints."""
 
     app.register_blueprint(core.views.blueprint)
+    app.register_blueprint(auth.views.blueprint)
 
 
 def register_public_request_handler(app: Flask):
