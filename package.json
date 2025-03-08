@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "watchCss": "npx tailwindcss -i ./booklist/static/styles/tailwind.css -o ./booklist/static/styles/style.css --watch",
-    "buildCss": "npx tailwindcss -i ./booklist/static/styles/tailwind.css -o ./booklist/static/styles/style.css --minify"
+    "buildCss": "npx tailwindcss -i ./booklist/static/styles/tailwind.css -o ./booklist/static/styles/style.css --minify",
+    "format": "prettier --write \"**/*.{html,css,js}\"",
+    "format:check": "prettier --check \"**/*.{html,css,js}\""
   },
   "repository": {
     "type": "git",
