@@ -38,6 +38,7 @@ def register_blueprints(app: Flask):
 
     app.register_blueprint(core.views.blueprint)
 
+
 def register_public_request_handler(app: Flask):
     """Handle public request."""
 
