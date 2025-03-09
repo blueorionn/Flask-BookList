@@ -17,7 +17,8 @@ class LoginView(MethodView):
 
         if authenticate_user(username, password):
             res = make_response(redirect("/"))
-            sessionId = create_session(get_userid(username), username)
+            userId = get_userid(username)
+            sessionId = create_session(userId, username)
             res.set_cookie("session", sessionId, max_age=3600, httponly=True)
             return res
         else:

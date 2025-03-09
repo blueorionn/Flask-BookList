@@ -89,7 +89,7 @@ def get_userid(username: str):
     cursor.close()
     conn.close()
 
-    return list(userid)[0]
+    return str(list(userid)[0]) or None
 
 
 def create_session(userid: str, username: str):
@@ -134,16 +134,9 @@ def create_session(userid: str, username: str):
         (session_id, userid, username, creation_date, expiry_date),
     )
 
-    # Get sessionId from database
-    cursor.execute(
-        "SELECT session_id FROM sessions WHERE username = %s AND user_id = %s",
-        (username, userid),
-    )
-    fetched_session_id = cursor.fetchone()
-
     # Closing connection
     conn.commit()
     cursor.close()
     conn.close()
 
-    return list(fetched_session_id)[0]
+    return session_id
