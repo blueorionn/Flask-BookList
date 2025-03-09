@@ -7,7 +7,7 @@ from booklist.utils import is_valid_uuid_v4
 def authenticate_user(username: str, password: str):
     """Check if user exists with valid credentials."""
 
-    qurey = """
+    query = """
         SELECT id,username,password FROM users WHERE username = %s
     """
 
@@ -25,7 +25,7 @@ def authenticate_user(username: str, password: str):
 
     # get user
     cursor.execute(
-        qurey,
+        query,
         (username,),
     )
     user = cursor.fetchone()
@@ -37,16 +37,16 @@ def authenticate_user(username: str, password: str):
     # If user exist
     if user is not None:
         # Checking if password is correct
-        f_user_id, f_username, f_password = (
+        fetched_user_id, fetched_username, fetched_password = (
             list(user)[0],
             list(user)[1],
             list(user)[2],
         )
 
         if (
-            (bcrypt.checkpw(password.encode("utf-8"), f_password.encode("utf-8")))
-            and (username == f_username)
-            and is_valid_uuid_v4(f_user_id)
+            (bcrypt.checkpw(password.encode("utf-8"), fetched_password.encode("utf-8")))
+            and (username == fetched_username)
+            and is_valid_uuid_v4(fetched_user_id)
         ):
             return True
         else:
