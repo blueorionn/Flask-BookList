@@ -24,6 +24,20 @@ def create_user_table():
     return query
 
 
+def create_session_table():
+    query = """
+        CREATE TABLE IF NOT EXISTS sessions (
+            session_id VARCHAR(36) PRIMARY KEY,
+            user_id VARCHAR(36),
+            username VARCHAR(255),
+            creation_date DATETIME,
+            expiry_date DATETIME,
+            last_login DATETIME
+        )
+    """
+    return query
+
+
 def get_create_user_query():
     query = """
         INSERT INTO users (
@@ -129,6 +143,9 @@ def main():
     # create user table if not exists
     create_user_table_query = create_user_table()
     cursor.execute(create_user_table_query)
+
+    # create session table
+    cursor.execute(create_session_table())
 
     # creating user
     create_user_query = get_create_user_query()
