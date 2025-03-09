@@ -1,5 +1,18 @@
 import os
 import mysql.connector
+from typing import List, NamedTuple
+
+
+class BookType(NamedTuple):
+    id: str
+    title: str
+    summary: str
+    ISBN: int
+    genre: str
+    publication_year: int
+    author: str
+    publisher: str
+    rating: float
 
 
 def list_books():
@@ -25,7 +38,7 @@ def list_books():
     cursor.execute(
         query,
     )
-    books = cursor.fetchall()
+    books: List[BookType] = cursor.fetchall()
 
     # Closing connection
     cursor.close()
