@@ -5,6 +5,8 @@ from booklist.utils import is_valid_uuid_v4
 
 
 def authenticate_user(username: str, password: str):
+    """Check if user exists with valid credentials."""
+
     qurey = """
         SELECT id,username,password FROM users WHERE username = %s
     """
