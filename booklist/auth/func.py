@@ -1,5 +1,8 @@
 import os
+import uuid
 import bcrypt
+import datetime
+from datetime import timedelta
 import mysql.connector
 from booklist.utils import is_valid_uuid_v4
 
@@ -31,6 +34,7 @@ def authenticate_user(username: str, password: str):
     user = cursor.fetchone()
 
     # Closing connection
+    conn.commit()
     cursor.close()
     conn.close()
 
@@ -53,3 +57,93 @@ def authenticate_user(username: str, password: str):
             return False
     else:
         return False
+
+
+def get_userid(username: str):
+    """Get UserId By Username"""
+    query = """
+        SELECT id FROM users WHERE username = %s
+    """
+
+    # creating database connection
+    conn = mysql.connector.connect(
+        host=os.environ.get("DB_HOST"),
+        database=os.environ.get("DB_NAME"),
+        user=os.environ.get("DB_USER"),
+        password=os.environ.get("DB_PASSWORD"),
+        port=os.environ.get("DB_PORT"),
+    )
+
+    # Get a cursor
+    cursor = conn.cursor()
+
+    # get user
+    cursor.execute(
+        query,
+        (username,),
+    )
+    userid = cursor.fetchone()
+
+    # Closing connection
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return list(userid)[0]
+
+
+def create_session(userid: str, username: str):
+    """Create user session"""
+
+    query = """
+        INSERT INTO sessions (
+            session_id,
+            user_id,
+            username,
+            creation_date,
+            expiry_date
+        ) VALUES (
+            %s,
+            %s,
+            %s,
+            %s,
+            %s
+        )
+    """
+
+    session_id = str(uuid.uuid4())
+    creation_date = datetime.datetime.now()
+    # Session id valid till 1 hour.
+    expiry_date = creation_date + timedelta(hours=1)
+
+    # creating database connection
+    conn = mysql.connector.connect(
+        host=os.environ.get("DB_HOST"),
+        database=os.environ.get("DB_NAME"),
+        user=os.environ.get("DB_USER"),
+        password=os.environ.get("DB_PASSWORD"),
+        port=os.environ.get("DB_PORT"),
+    )
+
+    # Get a cursor
+    cursor = conn.cursor()
+
+    # Create session
+    cursor.execute(
+        query,
+        (session_id, userid, username, creation_date, expiry_date),
+    )
+
+    # Get sessionId from database
+    cursor.execute(
+        "SELECT session_id FROM sessions WHERE username = %s AND user_id = %s",
+        (username, userid),
+    )
+    fetched_session_id = cursor.fetchone()
+
+    # Closing connection
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return list(fetched_session_id)[0]

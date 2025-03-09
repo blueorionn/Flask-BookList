@@ -27,7 +27,7 @@ VALUES
     (
         "e8c7c561-bc25-46f2-8b27-5ea8d42a9c5e",
         "Harry Potter and the Sorcerer's Stone",
-        "Harry Potter, an orphan living with his cruel Muggle (non-magical) relatives, discovers that he is a wizard. He begins attending Hogwarts School of Witchcraft and Wizardry, where he makes friends with Ron Weasley and Hermione Granger. Together, they embark on a journey to uncover the truth about the Sorcerer's Stone, a powerful object that can grant eternal life."
+        "Harry Potter, an orphan living with his cruel Muggle (non-magical) relatives, discovers that he is a wizard. He begins attending Hogwarts School of Witchcraft and Wizardry, where he makes friends with Ron Weasley and Hermione Granger. Together, they embark on a journey to uncover the truth about the Sorcerer's Stone, a powerful object that can grant eternal life.",
         9780439554930,
         "Fantasy, Magic",
         1997,

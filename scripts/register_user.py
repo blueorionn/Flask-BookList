@@ -31,8 +31,7 @@ def create_session_table():
             user_id VARCHAR(36),
             username VARCHAR(255),
             creation_date DATETIME,
-            expiry_date DATETIME,
-            last_login DATETIME
+            expiry_date DATETIME
         )
     """
     return query

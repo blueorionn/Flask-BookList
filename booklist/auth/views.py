@@ -1,8 +1,8 @@
 """Auth views."""
 
-from flask import Blueprint, request, render_template
+from flask import Blueprint, request, render_template, make_response, redirect
 from flask.views import MethodView
-from .func import authenticate_user
+from .func import authenticate_user, get_userid, create_session
 
 blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -16,7 +16,10 @@ class LoginView(MethodView):
         password = request.form.get("password")
 
         if authenticate_user(username, password):
-            return render_template("login.html")
+            res = make_response(redirect("/"))
+            sessionId = create_session(get_userid(username), username)
+            res.set_cookie("session", sessionId, max_age=3600, httponly=True)
+            return res
         else:
             message = {"message": "Username or password is invalid. "}
             return render_template("login.html", **message)
