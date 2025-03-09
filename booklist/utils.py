@@ -17,3 +17,7 @@ def is_valid_uuid_v4(id_str):
         return str(uuid_obj) == id_str
     except ValueError:
         return False
+
+
+def hyphenate_text(text: str):
+    return "-".join(text.lower().split(" "))

@@ -1,8 +1,10 @@
 """Core views."""
 
-from flask import Blueprint, render_template
+import os
+from flask import current_app, Blueprint, render_template, send_file
 from flask.views import MethodView
 from .func import list_books
+from booklist.utils import hyphenate_text
 
 blueprint = Blueprint("core", __name__)
 
@@ -25,11 +27,19 @@ class IndexView(MethodView):
             b["author"] = list(book)[6]
             b["publisher"] = list(book)[7]
             b["rating"] = list(book)[8]
+            b["thumbnail"] = f"/book/thumbnail/{hyphenate_text(list(book)[1])}.jpg"
 
             books.append(b)
-        
+
         context["books"] = books
         return render_template("index.html", **context)
+
+
+@blueprint.route("/book/thumbnail/<filename>")
+def serve_thumbnail(filename):
+    path = os.path.join(current_app.config["APP_DIR"], f"assets/{filename}")
+
+    return send_file(path, mimetype="image/jpg")
 
 
 index_view = IndexView.as_view("home")
