@@ -49,7 +49,7 @@ VALUES
     (
         "b6a7c3b6-2398-49c1-a6c0-4ee7a5e7bfc0",
         "The Invisible Man",
-        "Written in 1949, this dystopian novel depicts a totalitarian future society where the government exercises total control over its citizens. The story follows Winston Smith, a low-ranking member of the ruling Party, as he begins to question the official ideology and eventually rebels against the system, risking his life and sanity.",
+        "This masterpiece of science fiction is the fascinating story of Griffin, a scientist who creates a serum to render himself invisible, and his descent into madness that follows.",
         9780486284728,
         "Science Fiction, Classics",
         1897,
