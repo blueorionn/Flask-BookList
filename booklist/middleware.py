@@ -23,10 +23,10 @@ def authentication_middleware():
     if "session" in request.cookies:
         sessionId = str(request.cookies.get("session"))
         if not is_session_id_valid(sessionId):
-            return redirect("/auth/login", code=401)
+            return redirect("/auth/login")
         return
     else:
-        return redirect("/auth/login", code=401)
+        return redirect("/auth/login")
 
 
 def is_session_id_valid(sessionId: str):
