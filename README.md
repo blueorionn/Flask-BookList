@@ -2,6 +2,8 @@
 
 This project is a Flask-based web application that explores session authentication and middleware. The backend handles user authentication using Flask sessions, enforcing secure login/logout mechanisms, and applying middleware for request validation and logging. This setup provides a structured way to learn about user authentication, middleware functions, and frontend asset management in a Flask environment.
 
+⚠️ This project is created solely for fun and learning
+
 ## TechStack
 
 - Flask
