@@ -1,5 +1,7 @@
 # FLASK BOOKLIST
 
+![Cover Page](booklist/assets/cover.png)
+
 This project is a Flask-based web application that explores session authentication and middleware. The backend handles user authentication using Flask sessions, enforcing secure login/logout mechanisms, and applying middleware for request validation and logging. This setup provides a structured way to learn about user authentication, middleware functions, and frontend asset management in a Flask environment.
 
 ⚠️ This project is created solely for fun and learning
@@ -16,6 +18,8 @@ This project is a Flask-based web application that explores session authenticati
 
 - Python 3.11+
 - pip (Python package installer)
+- Nodejs
+- npm
 
 ### Steps
 
@@ -47,7 +51,7 @@ This project is a Flask-based web application that explores session authenticati
    export SECRET_KEY="your-secret-key"
    export DB_HOST="your-database-host"
    export DB_NAME="your-database-name"
-   export DB_USERNAME="your-database-username"
+   export DB_USER="your-database-username"
    export DB_PASSWORD="your-database-password"
    export DB_PORT="your-database-port"
    ```
