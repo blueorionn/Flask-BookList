@@ -12,6 +12,22 @@ This project is a Flask-based web application that explores session authenticati
 - Tailwindcss
 - MariaDB
 
+## Database Setup
+
+Required a **MySQL/MariaDB** database local or cloud.
+
+Create the movie table and load data as specified in the `data/books.sql` file.
+
+## User Creation
+
+To create a user, use the script with the following options. **Before beginning, make sure to properly load all environment variables listed in the [Installation section](#installation).**
+
+```bash
+python scripts/register_user.py -fn [first_name] -ln [lastname] -u [username] -p [password] -r [role] 
+```
+
+**Valid user roles are `admin` and `user`.**
+
 ## Installation
 
 ### Prerequisites
