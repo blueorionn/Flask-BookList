@@ -9,7 +9,7 @@ blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
 class LoginView(MethodView):
     def get(self):
-        return render_template("login.html")
+        return render_template("auth/login.html")
 
     def post(self):
         username = request.form.get("username")
@@ -19,11 +19,11 @@ class LoginView(MethodView):
             res = make_response(redirect("/"))
             userId = get_userid(username)
             sessionId = create_session(userId, username)
-            res.set_cookie("session", sessionId, max_age=3600, httponly=True)
+            res.set_cookie("session", sessionId, max_age=3600, httponly=False)
             return res
         else:
             message = {"message": "Username or password is invalid. "}
-            return render_template("login.html", **message)
+            return render_template("auth/login.html", **message)
 
 
 index_view = LoginView.as_view("login")
