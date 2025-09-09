@@ -40,6 +40,17 @@ class DBConnector:
         cursor.close()
         return result
 
+    def insert(self, query, params=None):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(query, params or ())
+        conn.commit()
+        last_id = cursor.lastrowid
+
+        cursor.close()
+        return last_id
+
     def close_connection(self, exception=None):
         conn = g.pop("db_conn", None)
         if conn is not None:

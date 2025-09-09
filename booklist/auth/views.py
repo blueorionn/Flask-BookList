@@ -26,5 +26,14 @@ class LoginView(MethodView):
             return render_template("auth/login.html", **message)
 
 
+class UserProfileView(MethodView):
+    def get(self):
+        context = {}
+        return render_template("profile/profile.html", **context)
+
+
 index_view = LoginView.as_view("login")
 blueprint.add_url_rule("/login", view_func=index_view)
+
+user_profile_view = UserProfileView.as_view("profile")
+blueprint.add_url_rule("/user/profile", view_func=user_profile_view)

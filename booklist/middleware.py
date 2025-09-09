@@ -1,6 +1,6 @@
 import os
 import datetime
-import mysql.connector
+from .database import db
 from flask import request, redirect
 
 
@@ -30,34 +30,18 @@ def authentication_middleware():
 
 
 def is_session_id_valid(sessionId: str):
-
-    # creating database connection
-    conn = mysql.connector.connect(
-        host=os.environ.get("DB_HOST"),
-        database=os.environ.get("DB_NAME"),
-        user=os.environ.get("DB_USER"),
-        password=os.environ.get("DB_PASSWORD"),
-        port=os.environ.get("DB_PORT"),
-    )
-
-    # Get a cursor
-    cursor = conn.cursor()
-
-    # get session
-    cursor.execute(
+    """Check if session id is valid"""
+    # get session data
+    session_data = db.query(
         "SELECT username, expiry_date FROM sessions WHERE session_id = %s",
         (sessionId,),
+        fetchone=True,
     )
-    session_data = cursor.fetchone()
-
-    # Closing connection
-    cursor.close()
-    conn.close()
 
     if session_data is not None:
         now = datetime.datetime.now()
 
-        if now > list(session_data)[1]:
+        if now > session_data["expiry_date"]:
             return False
         else:
             return True

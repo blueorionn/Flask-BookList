@@ -1,9 +1,8 @@
-import os
 import uuid
 import bcrypt
 import datetime
 from datetime import timedelta
-import mysql.connector
+from booklist.database import db
 from booklist.utils import is_valid_uuid_v4
 
 
@@ -14,43 +13,18 @@ def authenticate_user(username: str, password: str):
         SELECT id,username,password FROM users WHERE username = %s
     """
 
-    # creating database connection
-    conn = mysql.connector.connect(
-        host=os.environ.get("DB_HOST"),
-        database=os.environ.get("DB_NAME"),
-        user=os.environ.get("DB_USER"),
-        password=os.environ.get("DB_PASSWORD"),
-        port=os.environ.get("DB_PORT"),
-    )
-
-    # Get a cursor
-    cursor = conn.cursor()
-
     # get user
-    cursor.execute(
-        query,
-        (username,),
-    )
-    user = cursor.fetchone()
-
-    # Closing connection
-    conn.commit()
-    cursor.close()
-    conn.close()
+    user = db.query(query, (username,), fetchone=True)
 
     # If user exist
     if user is not None:
         # Checking if password is correct
-        fetched_user_id, fetched_username, fetched_password = (
-            list(user)[0],
-            list(user)[1],
-            list(user)[2],
-        )
+        _id, _username, _password = user["id"], user["username"], user["password"]
 
         if (
-            (bcrypt.checkpw(password.encode("utf-8"), fetched_password.encode("utf-8")))
-            and (username == fetched_username)
-            and is_valid_uuid_v4(fetched_user_id)
+            (bcrypt.checkpw(password.encode("utf-8"), _password.encode("utf-8")))
+            and (username == _username)
+            and is_valid_uuid_v4(_id)
         ):
             return True
         else:
@@ -59,37 +33,38 @@ def authenticate_user(username: str, password: str):
         return False
 
 
+def get_userdata_from_session(session_id: str):
+    """Get User Data From Session Id"""
+    query = """
+        SELECT user_id FROM sessions WHERE session_id = %s
+    """
+
+    # get userid from session id
+    session = db.query(query, (session_id,), fetchone=True)
+    user_id = session["user_id"] if session else None
+
+    # get user data
+    if user_id is not None and is_valid_uuid_v4(user_id):
+        userdata = db.query(
+            "SELECT id, firstname, lastname, username, role, created_at FROM users WHERE id = %s",
+            (user_id,),
+            fetchone=True,
+        )
+        return userdata if userdata else None
+    else:
+        return None
+
+
 def get_userid(username: str):
     """Get UserId By Username"""
     query = """
         SELECT id FROM users WHERE username = %s
     """
 
-    # creating database connection
-    conn = mysql.connector.connect(
-        host=os.environ.get("DB_HOST"),
-        database=os.environ.get("DB_NAME"),
-        user=os.environ.get("DB_USER"),
-        password=os.environ.get("DB_PASSWORD"),
-        port=os.environ.get("DB_PORT"),
-    )
+    # get user id
+    userid = db.query(query, (username,), fetchone=True)
 
-    # Get a cursor
-    cursor = conn.cursor()
-
-    # get user
-    cursor.execute(
-        query,
-        (username,),
-    )
-    userid = cursor.fetchone()
-
-    # Closing connection
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-    return str(list(userid)[0]) or None
+    return userid["id"] or None
 
 
 def create_session(userid: str, username: str):
@@ -116,27 +91,7 @@ def create_session(userid: str, username: str):
     # Session id valid till 1 hour.
     expiry_date = creation_date + timedelta(hours=1)
 
-    # creating database connection
-    conn = mysql.connector.connect(
-        host=os.environ.get("DB_HOST"),
-        database=os.environ.get("DB_NAME"),
-        user=os.environ.get("DB_USER"),
-        password=os.environ.get("DB_PASSWORD"),
-        port=os.environ.get("DB_PORT"),
-    )
-
-    # Get a cursor
-    cursor = conn.cursor()
-
     # Create session
-    cursor.execute(
-        query,
-        (session_id, userid, username, creation_date, expiry_date),
-    )
-
-    # Closing connection
-    conn.commit()
-    cursor.close()
-    conn.close()
+    db.insert(query, (session_id, userid, username, creation_date, expiry_date))
 
     return session_id
