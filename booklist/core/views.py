@@ -17,19 +17,8 @@ class IndexView(MethodView):
         # additional computation
         books = []
         for book in book_list:
-            b = {}
-            b["id"] = list(book)[0]
-            b["title"] = list(book)[1]
-            b["summary"] = list(book)[2]
-            b["ISBN"] = list(book)[3]
-            b["genre"] = list(book)[4]
-            b["publication_year"] = list(book)[5]
-            b["author"] = list(book)[6]
-            b["publisher"] = list(book)[7]
-            b["rating"] = list(book)[8]
-            b["thumbnail"] = f"/book/thumbnail/{hyphenate_text(list(book)[1])}.jpg"
-
-            books.append(b)
+            book["thumbnail"] = f"/book/thumbnail/{hyphenate_text(book['title'])}.jpg"
+            books.append(book)
 
         context["books"] = books
         return render_template("index.html", **context)

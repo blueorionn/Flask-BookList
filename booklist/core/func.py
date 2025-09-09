@@ -1,6 +1,5 @@
-import os
-import mysql.connector
 from typing import List, NamedTuple
+from booklist.database import db
 
 
 class BookType(NamedTuple):
@@ -21,27 +20,6 @@ def list_books():
     query = """
         SELECT * FROM books;
     """
-
-    # creating database connection
-    conn = mysql.connector.connect(
-        host=os.environ.get("DB_HOST"),
-        database=os.environ.get("DB_NAME"),
-        user=os.environ.get("DB_USER"),
-        password=os.environ.get("DB_PASSWORD"),
-        port=os.environ.get("DB_PORT"),
-    )
-
-    # Get a cursor
-    cursor = conn.cursor()
-
-    # get user
-    cursor.execute(
-        query,
-    )
-    books: List[BookType] = cursor.fetchall()
-
-    # Closing connection
-    cursor.close()
-    conn.close()
+    books: List[BookType] = db.query(query, fetchall=True)
 
     return books

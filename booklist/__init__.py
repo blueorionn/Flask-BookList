@@ -2,10 +2,11 @@
 
 from flask import Flask, render_template
 
+from booklist import core, auth
 from booklist.settings import config
 from booklist.extensions import init_cors
+from booklist.database import db
 from booklist.middleware import authentication_middleware
-from booklist import core, auth
 
 
 def create_app(config_object=config):
@@ -15,6 +16,9 @@ def create_app(config_object=config):
     """
     app = Flask(__name__)
     app.config.from_object(config_object)
+
+    # Initialize database with app
+    db.init_app(app)
 
     # Running middleware
     app.before_request(authentication_middleware)
