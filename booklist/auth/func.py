@@ -46,7 +46,7 @@ def get_userdata_from_session(session_id: str):
     # get user data
     if user_id is not None and is_valid_uuid_v4(user_id):
         userdata = db.query(
-            "SELECT id, firstname, lastname, username, role, created_at FROM users WHERE id = %s",
+            "SELECT id, first_name, last_name, username, role, created_at FROM users WHERE id = %s",
             (user_id,),
             fetchone=True,
         )

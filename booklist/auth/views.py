@@ -2,7 +2,12 @@
 
 from flask import Blueprint, request, render_template, make_response, redirect
 from flask.views import MethodView
-from .func import authenticate_user, get_userid, create_session
+from .func import (
+    authenticate_user,
+    get_userid,
+    create_session,
+    get_userdata_from_session,
+)
 
 blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -28,7 +33,20 @@ class LoginView(MethodView):
 
 class UserProfileView(MethodView):
     def get(self):
-        context = {}
+        # session cookie
+        session_cookie = request.cookies.get("session")
+
+        if session_cookie is None:
+            return redirect("/auth/login")
+
+        # get user data from session id
+        userdata = get_userdata_from_session(session_cookie)
+
+        if userdata is None:
+            context = ({"error_code": 403, "error_message": "Forbidden"},)
+            return render_template("handlers/handler.html", **context)
+
+        context = {"user": userdata}
         return render_template("profile/profile.html", **context)
 
 
